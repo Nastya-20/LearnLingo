@@ -1,7 +1,7 @@
 .wrapperTeachers{
     width: 1440px;
     background: #f8f8f8;
-    padding: 96px 128px;
+    padding: 5px 128px;
 }
 /* стилі для вибору елементів */
 .selectorTeachers{
@@ -18,6 +18,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 129%;
@@ -31,6 +32,7 @@
     padding: 16px 48px 12px 18px;
     width: 221px;
     height: 48px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -53,6 +55,7 @@
     width: 221px;
     height: 160px;
     background: #fff;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -65,6 +68,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 129%;
@@ -78,6 +82,7 @@
     width: 198px;
     height: 48px;
     background-color: #fff;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -94,6 +99,7 @@
 }
 
 .level {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -106,6 +112,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 129%;
@@ -118,6 +125,7 @@
     width: 124px;
     height: 48px;
     background-color: #fff;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -132,6 +140,7 @@
     outline: none;
 }
 .price {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 111%;
@@ -187,6 +196,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -208,6 +218,7 @@
     stroke: #121417;
 }
 .detailsTitle {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -219,6 +230,7 @@
 }
 
 .nameTeacher {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 24px;
     line-height: 100%;
@@ -227,6 +239,7 @@
 }
 
 .info {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -234,6 +247,7 @@
     margin-bottom:8px;
 }
 .infoSpeaks {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -252,6 +266,7 @@
 }
 
 .infoConditions {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -264,6 +279,8 @@
 }
 
 .readMore {
+    background-color: transparent;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -275,8 +292,8 @@
 .levelLanguages{
     display: flex;
     gap: 8px;
-    margin-top: 32px;
     background-color: #fff;
+    margin-bottom: 32px;
 }
 .levelAOne {
     border-radius: 35px;
@@ -284,6 +301,7 @@
     width: 110px;
     height: 32px;
     background: #f4c550;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 114%;
@@ -297,8 +315,72 @@
     padding: 8px 12px;
     min-width: 110px;
     height: 32px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 114%;
     color: #121417;
+}
+/* Кнопка Read more */
+.reviewText {
+    width: 968px;
+    min-height: 120px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 32px;
+}
+
+.reviewsList{
+    width: 417px;
+    min-height: 200px;
+}
+.reviewItem{
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.imgReview {
+    border-radius: 100px;
+    width: 44px;
+    height: 44px;
+}
+.reviewName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #8a8a89;
+    margin-bottom: 5px;
+}
+.iconStar{
+    margin-right: 8px;
+}
+.reviewItemText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 32px;
+}
+.bookLesson {
+    border-radius: 12px;
+    padding: 16px 48px;
+    width: 232px;
+    height: 60px;
+    background: #f4c550;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 156%;
+    color: #121417;
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bookLesson:hover,
+.bookLesson:focus {
+    background-color: #fbe9ba;
 }

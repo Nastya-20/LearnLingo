@@ -1,0 +1,93 @@
+.userMenu{
+    display: flex;
+    align-items: center;
+    width: 255px;
+    height: 48px;
+}
+.iconLogin{
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+.loginBtn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 125%;
+    color: #121417;
+    background-color: transparent;
+    margin-right: 16px;
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.loginBtn:hover,
+.loginBtn:focus{
+    color: #f4c550;
+}
+
+.loginBtn:active{
+    color: #f4c550;
+}
+.registrationBtn {
+    border-radius: 12px;
+    padding: 14px 39px;
+    width: 166px;
+    height: 48px;
+    background-color: #121417;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 125%;
+    color: #fff;
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.registrationBtn:hover,
+.registrationBtn:focus {
+    background-color: #f4c550;
+}
+
+.registrationBtn:active {
+    background-color: #f4c550;
+}
+/* modal */
+.login {
+    width: 438px;
+    min-height: 126px;
+}
+.loginTitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 120%;
+    letter-spacing: -0.02em;
+    color: #121417;
+    margin-bottom: 20px;
+}
+.loginText{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 137%;
+    color: rgba(18, 20, 23, 0.8);
+    margin-bottom: 40px;    
+}
+.registration{
+    width: 438px;
+    min-height: 126px;
+}
+.registrationTitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 120%;
+    letter-spacing: -0.02em;
+    color: #121417;
+    margin-bottom: 20px;
+}
+.registrationText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 137%;
+    color: rgba(18, 20, 23, 0.8);
+    margin-bottom: 40px;
+}

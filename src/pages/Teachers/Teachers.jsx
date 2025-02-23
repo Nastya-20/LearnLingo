@@ -4,10 +4,15 @@ import css from "./Teachers.module.css";
 
 export default function Teachers() {
     const [selectedLanguage, setSelectedLanguage] = useState("French");
+    const [isExpanded, setExpended] = useState(false);
 
     const handleChange = (event) => {
         setSelectedLanguage(event.target.value);
-    }
+    };
+
+    const handleReadMore = () => {
+        setExpended(true);
+    };
 
     return (
         <div className={css.wrapperTeachers}>
@@ -84,7 +89,7 @@ export default function Teachers() {
                         Jane Smith
                     </h2>
                     <p className={css.infoSpeaks}><span className={css.speaks}>
-                        Speaks:</span><span className={css.underlined}>German, French</span></p>
+                        Speaks: </span><span className={css.underlined}>German, French</span></p>
                     <p className={css.info}><span className={css.lesson}>
                         Lesson Info:</span> Lessons are structured to cover
                         grammar, vocabulary, and practical usage of
@@ -95,13 +100,63 @@ export default function Teachers() {
                         teenagers (13 years and above).Provides personalized
                         study plans
                     </p>
-                    <a href="" className={css.readMore}>Read more</a>
+                    {/* Кнопка Read more */}
+                    {!isExpanded && (
+                        <button className={css.readMore} onClick={handleReadMore}>
+                            Read more
+                        </button>
+                    )}
+                    {/* Додатковий контент: відгуки + кнопка Book trial lesson */}
+                    {isExpanded && (
+                        <>
+                            <p className={css.reviewText}>
+                                Jane is an experienced and dedicated
+                                language teacher specializing in German and French.
+                                She holds a Bachelor&apos;s degree in German Studies and a Master&apos;s
+                                degree in French Literature. Her passion for languages and
+                                teaching has driven her to become a highly proficient and
+                                knowledgeable instructor. With over 10 years of teaching experience,
+                                Jane has helped numerous students of various backgrounds and
+                                proficiency levels achieve their language learning goals.
+                                She is skilled at adapting her teaching methods to suit
+                                the needs and learning styles of her students, ensuring that
+                                they feel supported and motivated throughout their language journey.
+                            </p>
+                            <div className={css.reviewsList}>
+                                <div className={css.reviewItem}>
+                                    <img className={css.imgReview} width="96" height="96" src="/person.jpg" alt="Teacher" />
+                                    <div className={css.reviewReiting}>
+                                    <h3 className={css.reviewName}>Frank</h3>
+                                    <svg className={css.iconStar} aria-hidden="true" width="16" height="16">
+                                        <use href="/icons.svg#icon-Star-2" />
+                                    </svg>
+                                        4.0
+                                    </div>
+                                </div>
+                                <p className={css.reviewItemText}>Jane&apos;s lessons were very helpful. I made good progress.</p>
+                                <div className={css.reviewItem}>
+                                    <img className={css.imgReview} width="96" height="96" src="/person.jpg" alt="Teacher" />
+                                    <div>
+                                    <h3 className={css.reviewName}>Eve</h3>
+                                    <svg className={css.iconStar} aria-hidden="true" width="16" height="16">
+                                        <use href="/icons.svg#icon-Star-2" />
+                                    </svg>
+                                        5.0
+                                    </div>
+                                </div>
+                                <p className={css.reviewItemText}>Jane is an amazing teacher! She is patient and supportive.</p>
+                            </div>
+                        </>  
+                    )}
                     <div className={css.levelLanguages}>
                         <button className={css.levelAOne}>#A1 Beginner</button>
                         <button className={css.levelLang}>#A2 Elementary</button>
                         <button className={css.levelLang}>#B1 Intermediate</button>
                         <button className={css.levelLang}>#B2 Upper-Intermediate</button>
                     </div>
+                    {isExpanded && (
+                        <button className={css.bookLesson}>Book trial lesson</button>
+                    )}
                 </div>
             </div>
             <LoadMoreButton />

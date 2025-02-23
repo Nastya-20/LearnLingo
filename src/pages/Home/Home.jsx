@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import css from './Home.module.css';
 import { Link } from 'react-router-dom';
+import Loader from '../../components/Loader/Loader';
 
 export default function Home() {
     const [loading, setLoading] = useState(false);

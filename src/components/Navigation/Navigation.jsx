@@ -1,19 +1,29 @@
 import { NavLink } from 'react-router-dom';
+import UserMenu from '../UserMenu/UserMenu';
+import css from './Navigation.module.css';
 
 export default function Navigation() {
     return (
-        <nav>
-            <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
-                <svg width="24" height="24">
-                    <use href="/icons.svg#icon-ukraine"></use>
-                </svg>
-                <h3>LearnLingo</h3>
-                Home
-            </NavLink>
-            
-            <NavLink to="/teachers" className={({ isActive }) => isActive ? "active" : ""}>
-                Teachers
-            </NavLink>    
-        </nav>
+        <header className={css.header}>
+            <nav className={css.nav}>
+                <div className={css.logo}>
+                    <svg width="24" height="24">
+                        <use href="/icons.svg#icon-ukraine"></use>
+                    </svg>
+                    <NavLink to="/" className={css.navTitle}>LearnLingo</NavLink>
+                </div>
+                <div className={css.navigation}>
+                    <NavLink to="/" className={({ isActive }) => isActive ? css.active : css.link}>
+                        Home
+                    </NavLink>
+                    <NavLink to="/teachers" className={({ isActive }) => isActive ? css.active : css.link}>
+                        Teachers
+                    </NavLink>
+                </div>
+            </nav>
+            <nav>
+                <UserMenu />
+            </nav>
+        </header>
     );
 };
