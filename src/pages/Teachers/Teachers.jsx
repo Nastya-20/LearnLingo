@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
 import css from "./Teachers.module.css";
+
 
 export default function Teachers() {
     const [selectedLanguage, setSelectedLanguage] = useState("French");
@@ -11,18 +13,19 @@ export default function Teachers() {
     };
 
     const handleReadMore = () => {
-        setExpended(true);
+        setExpended(false);
     };
+   
 
     return (
-        <div className={css.wrapperTeachers}>
+            <div className={css.wrapperTeachers} >
             <ul className={css.selectorTeachers}>
                 <li>
                     <label className={css.languagesTeachers}>
                         Languages:
                         <select className={css.selectItemLang} value={selectedLanguage} onChange={handleChange}>
                             <option className={css.languages} value="French">French</option>
-                            <option className={css.languages} value="Spanish">English</option>
+                            <option className={css.languages} value="English">English</option>
                             <option className={css.languages} value="German">German</option>
                             <option className={css.languages} value="Ukrainian">Ukrainian</option>
                             <option className={css.languages} value="Polish">Polish</option>
@@ -162,4 +165,4 @@ export default function Teachers() {
             <LoadMoreButton />
         </div>
     );
-};
+}

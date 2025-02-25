@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import css from './Home.module.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 
 export default function Home() {
@@ -19,11 +19,11 @@ export default function Home() {
                     <p className={css.homeText}>Embark on an Exciting Language Journey with Expert Language
                         Tutors: Elevate your language proficiency to new heights by
                         connecting with highly qualified and experienced tutors.</p>
-                    <Link to="/teachers">
+                    <NavLink to="/teachers">
                     <button onClick={handleClick} className={css.homeBtn} type="submit">
                         Get started
                         </button>
-                    </Link>
+                    </NavLink>
                     {loading && <Loader />}{" "}
                     {/* Показуємо Loader, якщо завантаження активне */}
                 </div>
