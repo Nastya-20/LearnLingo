@@ -14,10 +14,12 @@ export default function UserMenu() {
     const [error, setError] = useState("");
     const [user, setUser] = useState(null);
 
-    const handleRegister = async (email, password) => {
-          try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            console.log("User registered successfully");
+
+    const handleRegister = async ({email, password }) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth,  email, password);
+            console.log("User registered successfully:", userCredential.user);
+
             navigate('/teachers');
         } catch (error) {
             console.error("Registration error:", error);
@@ -27,10 +29,13 @@ export default function UserMenu() {
         }
     };
 
-    const handleLogin = async (email, password) => {
+    const handleLogin = async ({ email, password }) => {
+        console.log("Logging  in with:", email, password);
+
           try {
             await signInWithEmailAndPassword(auth, email, password);
-            console.log("User logged in successfully");
+              console.log("User logged in successfully");
+
             navigate('/teachers');  
         } catch (error) {
             console.error("Login error:", error);
@@ -73,7 +78,7 @@ export default function UserMenu() {
             <nav className={css.userMenu}>
              {user ? (
                     <div className={css.wrapper}>
-                        <p>Welcome, {user.email}!</p>
+                        <p className={css.welcome}>Welcome, {user.email}!</p>
                         <button className={css.logout} type="button" onClick={handleLogout}>
                             Logout
                         </button>
@@ -83,11 +88,11 @@ export default function UserMenu() {
                         <svg className={css.iconLogin} aria-hidden="true" width="16" height="16">
                                 <use href="/icons.svg#icon-log-in-01" />
                         </svg>
-                        <button className={css.loginBtn} type="button" onClick={() => setIsLoginOpen(true)}>
+                            <button className={css.loginBtn} type="button" onClick={() => { setError(""); setIsLoginOpen(true); }}>
                             Log in
                         </button>
 
-                        <button className={css.registrationBtn} type="button" onClick={() => setIsRegisterOpen(true)}>
+                            <button className={css.registrationBtn} type="button" onClick={() => { setError(""); setIsRegisterOpen(true); }}>
                             Registration
                         </button>
                     </>
@@ -97,18 +102,23 @@ export default function UserMenu() {
             {isLoginOpen && (
                 <AuthModal className={css.login} onClose={() => setIsLoginOpen(false)}>
                     <h2 className={css.loginTitle}>Login</h2>
-                    <p className={css.loginText}>Welcome back! Please enter your credentials to access your account and continue your search for a teacher.</p>
+                    <p className={css.loginText}>Welcome back!
+                        Please enter your credentials to access your
+                        account and continue your search for a teacher.</p>
                     {error && <p className={css.errorText}>{error}</p>}
-                    <LoginForm onSubmit={handleLogin} />
+                    <LoginForm onSubmit={handleLogin} onClose={() => setIsLoginOpen(false)} />
                 </AuthModal>
             )}
 
             {isRegisterOpen && (
                 <AuthModal className={css.registration} onClose={() => setIsRegisterOpen(false)}>
                     <h2 className={css.registrationTitle}>Registration</h2>
-                    <p className={css.registrationText}>Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.</p>
+                    <p className={css.registrationText}>Thank you for your
+                        interest in our platform! In order to register,
+                        we need some information. Please provide us with
+                        the following information.</p>
                     {error && <p className={css.errorText}>{error}</p>}
-                    <RegistrationForm onSubmit={handleRegister} />
+                    <RegistrationForm onSubmit={handleRegister} onClose={() => setIsRegisterOpen(false)} />
                 </AuthModal>
             )}
         </>

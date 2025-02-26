@@ -1,19 +1,21 @@
 import { useState } from "react";
-
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
+import { AuthModal } from "../../components/AuthModal/AuthModal";
+import BookForm from "../../components/BookForm/BookForm";
 import css from "./Teachers.module.css";
 
 
 export default function Teachers() {
     const [selectedLanguage, setSelectedLanguage] = useState("French");
     const [isExpanded, setExpended] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleChange = (event) => {
         setSelectedLanguage(event.target.value);
     };
 
     const handleReadMore = () => {
-        setExpended(false);
+        setExpended(true);
     };
    
 
@@ -158,7 +160,18 @@ export default function Teachers() {
                         <button className={css.levelLang}>#B2 Upper-Intermediate</button>
                     </div>
                     {isExpanded && (
-                        <button className={css.bookLesson}>Book trial lesson</button>
+                        <>
+                            <button
+                                className={css.bookLesson}
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                Book trial lesson
+                            </button>
+                            {isModalOpen &&
+                                <AuthModal onClose={() => setIsModalOpen(false)}>
+                                    <BookForm onClose={() => setIsModalOpen(false)} />
+                                </AuthModal>}
+                        </>
                     )}
                 </div>
             </div>

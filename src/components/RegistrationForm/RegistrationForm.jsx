@@ -7,79 +7,67 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import css from './RegistrationForm.module.css';
 
-const RegistrationForm = ({ onSubmit }) => {
+const RegistrationForm = ({ onClose }) => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors }
-    } = useForm({
-        resolver: yupResolver(authSchema),
-        defaultValues: { name: "", email: "", password: "" },
-    });
-
-    function registerUser(data) {
-        console.log("Registering with:", data);
-
-        createUserWithEmailAndPassword(auth, data.email, data.password)
-            .then((userCredential) => {
-                console.log("User created:", userCredential.user);
-                reset(); 
-
-                if (onSubmit) {
-                    onSubmit(userCredential.user);
-                }
-            })
-            .catch((error) => {
-                let errorMessage;
-                switch (error.code) {
-                    case "auth/email-already-in-use":
-                        errorMessage = "This email is already registered. Try logging in.";
-                        break;
-                    case "auth/invalid-email":
-                        errorMessage = "Invalid email format.";
-                        break;
-                    case "auth/weak-password":
-                        errorMessage = "Password should be at least 6 characters.";
-                        break;
-                    default:
-                        errorMessage = "Registration failed. Please try again.";
-                }
-                console.error("Registration error:", error.code, error.message);
-                setError(errorMessage);
-            });
-    }
+   const {
+           reset,
+           formState: { errors },
+       } = useForm({
+           resolver: yupResolver(authSchema),
+           defaultValues: { name: "", email: "", password: "" },
+       });
+   
+    const register = async (e) => {
+           e.preventDefault();
+           createUserWithEmailAndPassword(auth, email, password)
+               .then((useCredential) => {
+                   console.log("User logged:", useCredential);
+                   reset();
+                   onClose();
+   
+               }).catch((error) => {
+                   console.log(error);
+                   setError("Register failed. Please try again.");
+               })
+       }
 
     return (
-        <form onSubmit={handleSubmit(registerUser)} className={css.authForm}>
+        <form onSubmit={register} className={css.authForm}>
             <div>
                 {errors.name && <p className={css.errors}>{errors.name.message}</p>}
                 <input
-                    {...register("name")}
                     className={css.nameForm}
-                    type="text"
+                    type="name"
                     placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
             </div>
             <div>
                 {errors.email && <p className={css.errors}>{errors.email.message}</p>}
                 <input
-                    {...register("email")}
                     className={css.emailForm}
                     type="email"
                     placeholder="Email"
+                    autoComplete="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
             <div className={css.inputWrapper}>
                 {errors.password && <p className={css.errors}>{errors.password.message}</p>}
                 <input
-                    {...register("password")}
                     className={css.passwordForm}
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
                 <svg
                     className={css.iconEye}

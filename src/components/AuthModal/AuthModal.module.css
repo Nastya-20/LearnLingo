@@ -15,9 +15,8 @@
     background: white;
     border-radius: 30px;
     position: relative;
-    max-width: 565px;
+    min-width: 565px;
     min-height: 505px;
-    width: 100%;
     padding: 64px;
 }
 

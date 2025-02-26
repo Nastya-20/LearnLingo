@@ -1,0 +1,141 @@
+.bookWrap{
+    width: 472px;
+}
+
+.bookTitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 120%;
+    letter-spacing: -0.02em;
+    color: #121417;
+    margin-bottom: 20px;
+}
+
+.bookText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 137%;
+    color: rgba(18, 20, 23, 0.8);
+    margin-bottom: 20px;
+}
+
+.infoTeacher{
+    width: 139px;
+    height: 44px;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 40px;
+}
+
+.imgTeacher {
+    border-radius: 100px;
+    width: 44px;
+    height: 44px;
+}
+
+.teacherText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 133%;
+    color: #8a8a89;
+    margin-bottom: 4px;
+}
+
+.teacherName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+}
+.select {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+.selectItem {
+    display: flex;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 137%;
+    color: #121417;
+}
+.radio {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #F4C550;
+    background-color: white;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+    margin-right: 8px;
+}
+
+.radio:checked {
+    background-color: #F4C550;
+    border: 6px solid white;
+    box-shadow: 0 0 0 2px #F4C550;
+}
+
+.input{
+    border: 1px solid rgba(18, 20, 23, 0.1);
+    border-radius: 12px;
+    padding: 16px 18px 16px 18px;
+    width: 472px;
+    height: 54px;
+    margin-bottom: 18px;
+}
+input::placeholder {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 137%;
+    color: #121417;
+}
+
+input:hover,
+input:focus {
+    outline: none;
+}
+.buttonBook {
+    border-radius: 12px;
+    padding: 16px 215px;
+    width: 472px;
+    height: 60px;
+    background-color: #F4C550;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 156%;
+    color: #121417;
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.buttonBook:hover,
+.buttonBook:focus {
+    background-color: #fbe9ba;
+}
+
+.buttonBook:active{
+    background-color: #fbe9ba;
+}
+.error{
+    color: #e63232;
+    margin-bottom: 5px;
+}
