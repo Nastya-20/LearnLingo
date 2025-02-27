@@ -46,6 +46,7 @@ const RegistrationForm = ({ onClose }) => {
                     placeholder="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    {...register('name')}
                 />
             </div>
             <div>
@@ -57,6 +58,7 @@ const RegistrationForm = ({ onClose }) => {
                     autoComplete="email" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    {...register('email')}
                 />
             </div>
             <div className={css.inputWrapper}>
@@ -68,6 +70,7 @@ const RegistrationForm = ({ onClose }) => {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    {...register('password')}
                 />
                 <svg
                     className={css.iconEye}

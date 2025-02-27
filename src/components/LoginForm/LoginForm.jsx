@@ -13,6 +13,7 @@ const LoginForm = ({onClose}) => {
     const [error, setError] = useState("");
 
     const {
+        register,
         reset,
         formState: { errors },
     } = useForm({
@@ -45,6 +46,7 @@ const LoginForm = ({onClose}) => {
                     autoComplete="email" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    {...register('email')}
                 />
             </div>
             <div className={css.inputWrapper}>
@@ -56,6 +58,7 @@ const LoginForm = ({onClose}) => {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    {...register('password')}
                 />
                 <svg
                     className={css.iconEye}
