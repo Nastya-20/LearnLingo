@@ -27,7 +27,7 @@ export default function Home() {
                     {loading && <Loader />}{" "}
                     {/* Показуємо Loader, якщо завантаження активне */}
                 </div>
-                <img className={css.imgHero} src="/public/block_1x.png" />
+                <img className={css.imgHero} src="/block_1x.png" />
             </div>
             <ul className={css.homeNumbers}>
                 <li>32,000&nbsp;+<span className={css.numbers}>Experienced tutors</span></li>
