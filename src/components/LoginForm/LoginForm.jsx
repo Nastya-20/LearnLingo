@@ -6,14 +6,13 @@ import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import css from './LoginForm.module.css';
 
-const LoginForm = ({onClose}) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const LoginForm = ({ onClose }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
 
     const {
         register,
+        handleSubmit,
         reset,
         formState: { errors },
     } = useForm({
@@ -21,31 +20,28 @@ const LoginForm = ({onClose}) => {
         defaultValues: { email: "", password: "" },
     });
 
-    const login = async (e) => {
-        e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-            .then((useCredential) => {
-                console.log("User created:", useCredential);
-                reset();
-                onClose();
+    const login = async (data) => {
+        const { email, password } = data;
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("User logged in:", userCredential);
+            reset();
+            onClose();
+        } catch (error) {
+            console.log(error);
+            setError("Login failed. Please try again.");
+        }
+    };
 
-            }).catch((error) => {
-                console.log(error);
-                setError("Login failed. Please try again.");
-            })
-    }
-      
     return (
-        <form onSubmit={login} className={css.authForm} autoComplete="on">
+        <form onSubmit={handleSubmit(login)} className={css.authForm} autoComplete="on">
             <div>
                 {errors.email && <p className={css.errors}>{errors.email.message}</p>}
                 <input
                     className={css.emailForm}
                     type="email"
                     placeholder="Email"
-                    autoComplete="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
                     {...register('email')}
                 />
             </div>
@@ -56,8 +52,6 @@ const LoginForm = ({onClose}) => {
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     {...register('password')}
                 />
                 <svg
@@ -77,5 +71,6 @@ const LoginForm = ({onClose}) => {
 };
 
 export default LoginForm;
+
 
 

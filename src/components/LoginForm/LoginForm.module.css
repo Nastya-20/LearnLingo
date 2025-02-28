@@ -56,7 +56,7 @@ form {
 }
  .errors{
     color: #da2929;
-    margin-bottom: 8px;
+    margin-bottom: 18px;
 }
 
 input::placeholder{

@@ -11,15 +11,13 @@ export default function Teachers() {
     const [expandedTeacherId, setExpandedTeacherId] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState("A1"); // New state for level
     const [selectedPrice, setSelectedPrice] = useState("10"); // New state for price
-    const [isExpanded, setExpended] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(4);
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch teachers from Firestore
-    useEffect(() => {
+     useEffect(() => {
         const fetchTeachers = async () => {
             setLoading(true);
             try {
@@ -149,7 +147,7 @@ export default function Teachers() {
                                 </p>
                                 <p className={css.info}><span className={css.lesson}>Lesson Info:</span> {teacher.lesson_info}</p>
                                 <p className={css.infoConditions}><span className={css.conditions}>Conditions:</span> {teacher.conditions}</p>
-                                
+
                                 {/* Кнопка Read more */}
 
                                 {expandedTeacherId !== teacher.id && (
@@ -181,7 +179,7 @@ export default function Teachers() {
                                 )}
 
                                 {/* Додатковий контент: відгуки + кнопка Book trial lesson */}
-                                
+
                                 <div className={css.levelLanguages}>
                                     {teacher.levels.map((level, index) => (
                                         <button key={index} className={css.levelLang}>
@@ -191,7 +189,7 @@ export default function Teachers() {
                                 </div>
 
                                 {/* Book trial lesson button */}
-                                
+
                                 {expandedTeacherId === teacher.id && (
                                     <>
                                         <button className={css.openModalBtn} onClick={() => setIsModalOpen(true)}>

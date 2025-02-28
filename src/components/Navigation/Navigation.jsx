@@ -19,6 +19,9 @@ export default function Navigation() {
                     <NavLink to="/teachers" className={({ isActive }) => isActive ? css.active : css.link}>
                         Teachers
                     </NavLink>
+                    <NavLink to="/favorites" className={({ isActive }) => isActive ? css.active : css.link}>
+                        Favorites
+                    </NavLink>
                 </div>
             </nav>
             <nav>
@@ -27,3 +30,4 @@ export default function Navigation() {
         </header>
     );
 };
+

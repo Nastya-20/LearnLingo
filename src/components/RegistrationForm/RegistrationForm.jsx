@@ -14,7 +14,9 @@ const RegistrationForm = ({ onClose }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
 
-   const {
+    const {
+        register,
+        handleSubmit,
            reset,
            formState: { errors },
        } = useForm({
@@ -22,22 +24,22 @@ const RegistrationForm = ({ onClose }) => {
            defaultValues: { name: "", email: "", password: "" },
        });
    
-    const register = async (e) => {
-           e.preventDefault();
-           createUserWithEmailAndPassword(auth, email, password)
-               .then((useCredential) => {
-                   console.log("User logged:", useCredential);
-                   reset();
-                   onClose();
-   
-               }).catch((error) => {
-                   console.log(error);
-                   setError("Register failed. Please try again.");
-               })
-       }
+
+    const onSubmit = async (data) => {
+        const { email, password } = data; // Отримуємо дані з форми
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log("User registered:", userCredential);
+            reset();
+            onClose();
+        } catch (error) {
+            console.error(error);
+            setError("Register failed. Please try again.");
+        }
+    };
 
     return (
-        <form onSubmit={register} className={css.authForm}>
+        <form onSubmit={handleSubmit(onSubmit)} className={css.authForm}>
             <div>
                 {errors.name && <p className={css.errors}>{errors.name.message}</p>}
                 <input

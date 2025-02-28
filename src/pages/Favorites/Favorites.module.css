@@ -1,0 +1,416 @@
+.wrapperTeachers {
+    width: 1440px;
+    background: #f8f8f8;
+    padding: 5px 128px;
+}
+
+/* стилі для вибору елементів */
+.selectorTeachers {
+    width: 583px;
+    height: 74px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 20px;
+}
+
+/* вибір мови */
+.languagesTeachers {
+    width: 221px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 129%;
+    color: #8a8a89;
+}
+
+.selectItemLang {
+    border-radius: 14px;
+    border: none;
+    background: #fff;
+    padding: 16px 18px 12px 18px;
+    width: 221px;
+    height: 48px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: #121417;
+}
+
+.selectItemLang:hover,
+.selectItemLang:focus {
+    outline: none;
+    background-color: transparent;
+}
+
+.selectItemLang:active {
+    outline: none;
+    background-color: transparent;
+}
+
+.languages {
+    border-radius: 12px;
+    width: 221px;
+    height: 160px;
+    background: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: rgba(18, 20, 23, 0.2);
+}
+
+/* вибір рівня мови */
+.levelTeachers {
+    width: 198px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 129%;
+    color: #8a8a89;
+}
+
+.selectItemLevel {
+    border-radius: 14px;
+    border: none;
+    padding: 14px 18px 10px 18px;
+    width: 198px;
+    height: 48px;
+    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: #121417;
+}
+
+.selectItemLevel:hover,
+.selectItemLevel:focus {
+    outline: none;
+}
+
+.selectItemLevel:active {
+    outline: none;
+}
+
+.level {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: rgba(18, 20, 23, 0.2);
+}
+
+/* вибір ціни часу уроку */
+.priceTeachers {
+    width: 124px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 129%;
+    color: #8a8a89;
+}
+
+.selectItemPrice {
+    border: none;
+    border-radius: 14px;
+    padding: 14px 18px;
+    width: 124px;
+    height: 48px;
+    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: #121417;
+}
+
+.selectItemPrice:hover,
+.selectItemPrice:focus {
+    outline: none;
+}
+
+.selectItemPrice:active {
+    outline: none;
+}
+
+.price {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 111%;
+    color: rgba(18, 20, 23, 0.2);
+}
+
+/* деталі вчителя */
+
+.detailsTeachers {
+    display: flex;
+    gap: 48px;
+    border-radius: 24px;
+    padding: 24px;
+    width: 1184px;
+    height: auto;
+    background-color: #fff;
+    margin-bottom: 64px;
+}
+
+.imgContainer {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 100%;
+    border: 3px solid #fbe9ba;
+}
+
+.imgTeachers {
+    width: 96px;
+    height: 96px;
+    border-radius: 100px;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.detailsItems {
+    display: flex;
+    align-items: center;
+    width: 968px;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.detailsLink {
+    display: flex;
+    gap: 16px;
+    min-width: 607px;
+    height: 24px;
+    margin-right: 64px;
+}
+
+.detailsText {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+}
+
+.priceNumber {
+    color: #38cd3e;
+    ;
+}
+
+.iconBook {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+    stroke: #121417;
+}
+
+.iconsHeart {
+    width: 26px;
+    height: 26px;
+    fill: #fff;
+    stroke: #121417;
+}
+
+.detailsTitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #8a8a89;
+    margin-right: 192px;
+}
+
+.line {
+    color: #d1d1c7;
+}
+
+.nameTeacher {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    color: #121417;
+    margin-bottom: 32px;
+}
+
+.info {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 8px;
+}
+
+.infoSpeaks {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 8px;
+}
+
+.speaks {
+    text-decoration: none;
+    color: #8a8a89;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+.lesson {
+    color: #8a8a89;
+}
+
+.infoConditions {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 16px;
+}
+
+.conditions {
+    color: #8a8a89;
+}
+
+.readMore {
+    background-color: transparent;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    text-decoration: underline;
+    color: #121417;
+    margin-bottom: 32px;
+}
+
+.levelLanguages {
+    display: flex;
+    gap: 8px;
+    background-color: #fff;
+    margin-bottom: 32px;
+}
+
+.levelAOne {
+    border-radius: 35px;
+    padding: 8px 12px;
+    width: 110px;
+    height: 32px;
+    background: #f4c550;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 114%;
+    color: #121417;
+}
+
+.levelLang {
+    border: 1px solid rgba(18, 20, 23, 0.2);
+    background-color: transparent;
+    border-radius: 35px;
+    padding: 8px 12px;
+    min-width: 110px;
+    height: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 114%;
+    color: #121417;
+}
+
+/* Кнопка Read more */
+.reviewText {
+    width: 968px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 32px;
+}
+
+.reviewsList {
+    width: 417px;
+    min-height: 200px;
+}
+
+.reviewItem {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.reviewReiting {
+    display: flex;
+    gap: 12px;
+}
+
+.imgReview {
+    border-radius: 100px;
+    width: 44px;
+    height: 44px;
+}
+
+.reviewName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #8a8a89;
+    margin-bottom: 5px;
+}
+
+.iconStar {
+    margin-right: 8px;
+}
+
+.reviewItemText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: #121417;
+    margin-bottom: 32px;
+}
+
+.openModalBtn {
+    border-radius: 12px;
+    padding: 16px 48px;
+    width: 232px;
+    height: 60px;
+    background: #f4c550;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 156%;
+    color: #121417;
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.openModalBtn:hover,
+.openModalBtn:focus {
+    background-color: #fbe9ba;
+}
