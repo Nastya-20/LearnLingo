@@ -16,16 +16,12 @@
 ::after {
   box-sizing: border-box;
 }
-
-container {
-  width: 1440px;
-  height: 768px;
-}
-
 body {
   box-sizing: border-box;
   font-family: sans-serif;
   line-height: 1.5;
+  width: 1440px;
+  min-height: 768px;
 }
 
 h1,
