@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { db, auth } from "../../firebase";
+import { collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import BookForm from "../../components/BookForm/BookForm";
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
 import css from "./Favorites.module.css";
 
 export default function Favorites() {
-      const [expandedTeacherId, setExpandedTeacherId] = useState(null);
+    const [expandedTeacherId, setExpandedTeacherId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-        const [visibleCount, setVisibleCount] = useState(4);
-        const [teachers, setTeachers] = useState([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-    const [favorites, setFavorites] = useState(new Set(JSON.parse(localStorage.getItem("favorites")) || []));
+    const [visibleCount, setVisibleCount] = useState(4);
+    const [teachers, setTeachers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [user, setUser] = useState(null);
+    const [favorites, setFavorites] = useState([]);
+
+    // Відстежую авторизації користувача
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    // Завантажую улюблених викладачів після оновлення `user`
+    useEffect(() => {
+        if (user) {
+            loadFavorites(user.uid);
+        }
+    }, [user]);
 
     useEffect(() => {
         const fetchTeachers = async () => {
@@ -23,9 +40,7 @@ export default function Favorites() {
                     id: doc.id,
                     ...doc.data(),
                 }));
-                // Фільтруємо лише улюблених вчителів
-                const favoriteTeachers = teachersList.filter(teacher => favorites.has(teacher.id));
-                setTeachers(favoriteTeachers);
+                setTeachers(teachersList);
             } catch (error) {
                 console.error("Error fetching teachers:", error);
                 setError("Failed to load teachers.");
@@ -35,15 +50,54 @@ export default function Favorites() {
         };
 
         fetchTeachers();
-    }, [favorites]);
+    }, []);
 
-    const toggleModal = () => setIsModalOpen((prev) => !prev);
-    
-    const handleReadMore = (teacherId) => {
-        setExpandedTeacherId(prevId => (prevId === teacherId ? null : teacherId));
+    // Завантажую обраних викладачів
+    const loadFavorites = async (userId) => {
+        try {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                setFavorites(userSnap.data().favorites || []);
+            }
+        } catch (error) {
+            console.error("Error loading favorites:", error);
+        }
     };
 
-    return (
+    // Додаю/видаляю з обраних
+    const toggleFavorite = async (teacherId) => {
+        if (!user) {
+            alert("This feature is available for authorized users only.");
+            return;
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        const isFavorite = favorites.includes(teacherId);
+
+        try {
+            await updateDoc(userRef, {
+                favorites: isFavorite ? arrayRemove(teacherId) : arrayUnion(teacherId),
+            });
+            setFavorites((prev) =>
+                isFavorite ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
+            );
+        } catch (error) {
+            console.error("Error updating favorites:", error);
+        }
+    };
+
+    const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+    const handleReadMore = (teacherId) => {
+        setExpandedTeacherId((prevId) => (prevId === teacherId ? null : teacherId));
+    };
+
+    // Фільтруєю лише викладачів, які є в `favorites`
+    const favoriteTeachers = teachers.filter((teacher) => favorites.includes(teacher.id));
+
+        
+     return (
         <div className={css.wrapperTeachers}>
             <ul className={css.selectorTeachers}>
                 <li>
@@ -90,9 +144,9 @@ export default function Favorites() {
             {loading && <p>Loading favorite teachers...</p>}
             {error && <p className={css.error}>{error}</p>}
 
-            {!loading && !error && teachers.length === 0 && <p>No favorite teachers yet.</p>}
+             {!loading && !error && favoriteTeachers.length === 0 && <p>No favorite teachers yet.</p>}
 
-            {!loading && !error && teachers.slice(0, visibleCount).map((teacher) => (
+             {!loading && !error && favoriteTeachers.slice(0, visibleCount).map((teacher) => (
                 <div key={teacher.id} className={css.detailsTeachers}>
                     <div className={css.imgContainer}>
                         <img className={css.imgTeachers} width="96" height="96" src={teacher.avatar_url} alt={teacher.name} />
@@ -122,7 +176,17 @@ export default function Favorites() {
                                     Price&nbsp;/&nbsp;1&nbsp;hour:&nbsp;<span className={css.priceNumber}>{teacher.price_per_hour}$</span>
                                 </li>
                             </ul>
-                            <svg className={css.iconsHeart} aria-hidden="true" width="26" height="26">
+                            {/* Heart icon for adding/removing favorite */}
+                            <svg
+                                onClick={() => {
+                                    toggleFavorite(teacher.id);
+                                     console.log(`Favorite status of teacher ${teacher.id}:`, favorites.includes(teacher.id));
+                                }}
+                                className={favorites.includes(teacher.id) ? css.iconHeartActive : css.iconHeart}
+                                aria-hidden="true"
+                                width="26"
+                                height="26"
+                            >
                                 <use href="/icons.svg#icon-heart" />
                             </svg>
                         </div>
@@ -174,7 +238,7 @@ export default function Favorites() {
                             ))}
                         </div>
 
-                        {/* Book trial lesson button */}
+                        {/* Кнопка Book trial lesson */}
 
                         {expandedTeacherId === teacher.id && (
                             <>

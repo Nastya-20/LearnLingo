@@ -1,42 +1,100 @@
 import React, { useState, useEffect } from "react";
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
 import BookForm from "../../components/BookForm/BookForm";
-import { db } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { db, auth } from "../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { setDoc, collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "firebase/firestore";
 import css from "./Teachers.module.css";
 
 
 export default function Teachers() {
     const [selectedLanguage, setSelectedLanguage] = useState("French");
     const [expandedTeacherId, setExpandedTeacherId] = useState(null);
-    const [selectedLevel, setSelectedLevel] = useState("A1"); // New state for level
-    const [selectedPrice, setSelectedPrice] = useState("10"); // New state for price
+    const [selectedLevel, setSelectedLevel] = useState("A1"); 
+    const [selectedPrice, setSelectedPrice] = useState("10"); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(4);
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [user, setUser] = useState(null);
+    const [favorites, setFavorites] = useState([]);
 
-     useEffect(() => {
-        const fetchTeachers = async () => {
-            setLoading(true);
+    useEffect(() => {
+        // Перевіряю статус авторизації користувача
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            if (currentUser) {
+                loadFavorites(currentUser.uid);
+            } else {
+                const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+                setFavorites(savedFavorites);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+        // Завантажую обраних викладачів
+    const loadFavorites = async (userId) => {
+        try {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                setFavorites(userSnap.data().favorites || []);
+            }
+        } catch (error) {
+            console.error("Error loading favorites:", error);
+        }
+    };
+
+    // Додаю/видаляю з обраних
+    const toggleFavorite = async (teacherId) => {
+        if (!user) {
+            alert("This feature is available for authorized users only.");
+            return;
+        }
+       if(user){
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        // Якщо документ користувача не існує, створюю новий
+        if (!userSnap.exists()) {
+            console.log("User document does not exist. Creating a new document...");
             try {
-                const querySnapshot = await getDocs(collection(db, "teachers"));
-                const teachersList = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setTeachers(teachersList);
+                // Створюю документ з полем "favorites", яке містить поточного викладача
+                await setDoc(userRef, { favorites: [teacherId] });
+                setFavorites([teacherId]);  // Оновлюю стейт локально
             } catch (error) {
-                console.error("Error fetching teachers:", error);
-                setError("Failed to load teachers.");
-            } finally {
-                setLoading(false);
+                console.error("Error creating user document:", error);
+            }
+            return;
+        }
+
+        // Якщо користувач вже має документ, додаю або видаляю викладача з його обраних
+        const isFavorite = favorites.includes(teacherId);
+           try {
+               await updateDoc(userRef, {
+                   favorites: isFavorite ? arrayRemove(teacherId) : arrayUnion(teacherId),
+               });
+               setFavorites((prev) =>
+                   isFavorite ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
+               );
+           } catch (error) {
+               console.error("Error updating favorites:", error);
+           }
+            } else {
+           // Для неавторизованих користувачів
+                const updatedFavorites = favorites.includes(teacherId)
+                    ? favorites.filter((id) => id !== teacherId)
+                    : [...favorites, teacherId];
+
+                setFavorites(updatedFavorites);
+           localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+           console.log("Updated favorites saved to localStorage:", updatedFavorites);
             }
         };
 
-        fetchTeachers();
-    }, []);
 
     const toggleModal = () => setIsModalOpen((prev) => !prev);
 
@@ -55,7 +113,39 @@ export default function Teachers() {
 
     const handleReadMore = (teacherId) => {
         setExpandedTeacherId(prevId => (prevId === teacherId ? null : teacherId));
-    };
+        };
+        
+      const fetchTeachers = async () => {
+                setLoading(true);
+                try {
+                    const querySnapshot = await getDocs(collection(db, "teachers"));
+                    const teachersList = querySnapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                    }));
+                    setTeachers(teachersList);
+                } catch (error) {
+                    console.error("Error fetching teachers:", error);
+                    setError("Failed to load teachers.");
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+        useEffect(() => {
+            fetchTeachers();
+        }, []);
+    // Додаю log після успішного отримання викладачів
+    useEffect(() => {
+        if (teachers.length > 0) {
+            console.log("Teachers successfully fetched and set:", teachers);
+        }
+    }, [teachers]);
+    useEffect(() => {
+        console.log("Updated favorites state after toggle:", favorites);
+    }, [favorites]);
+
+
 
     return (
         <div className={css.wrapperTeachers}>
@@ -136,7 +226,14 @@ export default function Teachers() {
                                             Price&nbsp;/&nbsp;1&nbsp;hour:&nbsp;<span className={css.priceNumber}>{teacher.price_per_hour}$</span>
                                         </li>
                                     </ul>
-                                    <svg className={css.iconsHeart} aria-hidden="true" width="26" height="26">
+                                    {/* Кнопка "серце" */}
+                                    <svg
+                                        className={`${css.iconsHeart} ${favorites.includes(teacher.id) ? css.heartActive : ""}`}
+                                        aria-hidden="true"
+                                        width="26"
+                                        height="26"
+                                        onClick={() => toggleFavorite(teacher.id)}
+                                    >
                                         <use href="/icons.svg#icon-heart" />
                                     </svg>
                                 </div>
@@ -188,7 +285,7 @@ export default function Teachers() {
                                     ))}
                                 </div>
 
-                                {/* Book trial lesson button */}
+                                {/* Кнопка Book trial lesson */}
 
                                 {expandedTeacherId === teacher.id && (
                                     <>

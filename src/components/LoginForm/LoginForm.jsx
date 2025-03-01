@@ -1,35 +1,35 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { authSchema } from '../AuthModal/authSchema';
-import { auth } from '../../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { loginSchema } from '../AuthModal/authSchema';
+
 import css from './LoginForm.module.css';
 
-const LoginForm = ({ onClose }) => {
+const LoginForm = ({ onSubmit, onClose, onSwitchToLogin }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(authSchema),
-        defaultValues: { email: "", password: "" },
+    
+    const {reset, register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(loginSchema),
     });
+    console.log("Form Errors:", errors);
 
     const login = async (data) => {
-        const { email, password } = data;
+        console.log("Form data:", data); 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("User logged in:", userCredential);
-            reset();
+            await onSubmit(data);
             onClose();
+            reset();
         } catch (error) {
-            console.log(error);
-            setError("Login failed. Please try again.");
+            console.log("Login error:", error.code);
+            if (error.code === 'auth/user-not-found'){
+                setError("This user doesn't exist. Please register first.");
+                onSwitchToLogin();
+            } else if (error.code === 'auth/wrong-password') {
+                setError("Incorrect password. Please try again.");
+            } else {
+                setError("Login failed. Please try again.");
+            }
         }
     };
 
@@ -64,7 +64,7 @@ const LoginForm = ({ onClose }) => {
                     <use href={`/icons.svg#icon-eye${showPassword ? "" : "-off"}`} />
                 </svg>
             </div>
-            <button className={css.buttonForm} type="submit">Log In</button>
+            <button className={css.buttonForm} type="submit">Log in</button>               
             {error && <p className={css.errors}>{error}</p>}
         </form>
     );

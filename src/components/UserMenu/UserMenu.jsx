@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { AuthModal } from "../AuthModal/AuthModal";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    signInWithEmailAndPassword,
+    updateProfile
+} from "firebase/auth";
 import LoginForm from "../LoginForm/LoginForm";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import { auth } from "../../firebase";
@@ -15,30 +21,52 @@ export default function UserMenu() {
     const [user, setUser] = useState(null);
 
 
-    const handleRegister = async ({email, password }) => {
+    const handleRegister = async ({name, email, password }) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth,  email, password);
             console.log("User registered successfully:", userCredential.user);
+            const user = userCredential.user;
 
-            navigate('/teachers');
+            await updateProfile(user, {
+                displayName: name
+            });
+            await signInWithEmailAndPassword(auth, email, password);
+            console.log("User logged in successfully");
+
+            navigate('/teachers'); 
+            setIsRegisterOpen(false);
         } catch (error) {
             console.error("Registration error:", error);
             if (error.code === 'auth/email-already-in-use') {
                 setError("This email is already in use. Please log in.");
+                setIsRegisterOpen(false); 
+                setIsLoginOpen(true);
+            } else {
+                setError("Registration failed. Please try again.");
             }
         }
     };
 
     const handleLogin = async ({ email, password }) => {
         console.log("Logging  in with:", email, password);
+        try {
+            // Перевірка, чи вже залогінений користувач
+            const user = auth.currentUser;
+            if (user) {
+                navigate('/teachers');
+                return;
+            }
 
-          try {
-            await signInWithEmailAndPassword(auth, email, password);
-              console.log("User logged in successfully");
+            // Логін користувача
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("User logged in successfully:", userCredential.user);
 
-            navigate('/teachers');  
+            // Перехід на сторінку викладачів
+            navigate('/teachers');
+
         } catch (error) {
             console.error("Login error:", error);
+
             if (error.code === 'auth/user-not-found') {
                 setError("This user doesn't exist. Please register first.");
             } else if (error.code === 'auth/wrong-password') {
@@ -73,6 +101,12 @@ export default function UserMenu() {
         };
     }, []);
 
+    const handleSwitchToLogin = () => {
+        setIsRegisterOpen(false);
+        setIsLoginOpen(true);
+    };
+
+
     return (
         <>
             <nav className={css.userMenu}>
@@ -106,7 +140,7 @@ export default function UserMenu() {
                         Please enter your credentials to access your
                         account and continue your search for a teacher.</p>
                     {error && <p className={css.errorText}>{error}</p>}
-                    <LoginForm onSubmit={handleLogin} onClose={() => setIsLoginOpen(false)} />
+                    <LoginForm onSubmit={handleLogin} onClose={() => setIsLoginOpen(false)} onSwitchToLogin={setIsRegisterOpen} />
                 </AuthModal>
             )}
 
@@ -118,7 +152,7 @@ export default function UserMenu() {
                         we need some information. Please provide us with
                         the following information.</p>
                     {error && <p className={css.errorText}>{error}</p>}
-                    <RegistrationForm onSubmit={handleRegister} onClose={() => setIsRegisterOpen(false)} />
+                    <RegistrationForm onSubmit={handleRegister} onClose={() => setIsRegisterOpen(false)} onSwitchToLogin={handleSwitchToLogin} />
                 </AuthModal>
             )}
         </>

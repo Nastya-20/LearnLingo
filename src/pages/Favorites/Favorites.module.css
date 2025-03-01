@@ -222,11 +222,15 @@
     stroke: #121417;
 }
 
-.iconsHeart {
+.iconHeart {
     width: 26px;
     height: 26px;
     fill: #fff;
     stroke: #121417;
+}
+.iconHeartActive {
+    fill: #f4c550;
+    stroke: #f4c550;
 }
 
 .detailsTitle {

@@ -48,6 +48,9 @@ export default function BookForm({ toggleModal, isOpen }) {
                             </div>
                         </div>
                         <form className={css.bookForm} onSubmit={handleSubmit(onSubmit)}>
+
+                            <p className={css.error}>{errors.reason?.message}</p>
+
                             <fieldset className={css.select}>
                                 <label className={css.selectItem}>
                                     <input type="radio" className={css.radio} value="Career and business" {...register('reason')} /> Career and business
@@ -65,32 +68,30 @@ export default function BookForm({ toggleModal, isOpen }) {
                                     <input type="radio" className={css.radio} value="Culture, travel or hobby" {...register('reason')} /> Culture, travel or hobby
                                 </label>
                             </fieldset>
-                            <p className={css.error}>{errors.reason?.message}</p>
-
+ 
+                            <p className={css.error}>{errors.name?.message}</p>
                             <input
                                 className={css.input}
                                 type="text"
                                 placeholder="Full Name"
                                 {...register('name')}
                             />
-                            <p className={css.error}>{errors.name?.message}</p>
 
+                            <p className={css.error}>{errors.email?.message}</p>
                             <input
                                 className={css.input}
                                 type="email"
                                 placeholder="Email"
                                 {...register('email')}
                             />
-                            <p className={css.error}>{errors.email?.message}</p>
-
+                            <p className={css.error}>{errors.phone?.message}</p>
                             <input
                                 className={css.input}
                                 type="text"
                                 placeholder="Phone number"
                                 {...register('phone')}
                             />
-                            <p className={css.error}>{errors.phone?.message}</p>
-
+ 
                             <button className={css.buttonBook} type="submit">
                                 Book
                             </button>

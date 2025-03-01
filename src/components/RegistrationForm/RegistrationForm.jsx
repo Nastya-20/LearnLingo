@@ -1,53 +1,39 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { authSchema } from '../AuthModal/authSchema';
-import { auth } from '../../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-
+import { registerSchema } from '../AuthModal/authSchema';
 import css from './RegistrationForm.module.css';
 
-const RegistrationForm = ({ onClose }) => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const RegistrationForm = ({ onSubmit, onClose, onSwitchToLogin }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
+    const {reset, register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(registerSchema),
+    });
+    console.log("Form Errors:", errors); 
 
-    const {
-        register,
-        handleSubmit,
-           reset,
-           formState: { errors },
-       } = useForm({
-           resolver: yupResolver(authSchema),
-           defaultValues: { name: "", email: "", password: "" },
-       });
-   
-
-    const onSubmit = async (data) => {
-        const { email, password } = data; // Отримуємо дані з форми
+    const submitForm = async (data) => {
+        console.log("Form data:", data); 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log("User registered:", userCredential);
-            reset();
+            await onSubmit(data);  
             onClose();
+            reset(),
+            onSwitchToLogin(data);
         } catch (error) {
-            console.error(error);
-            setError("Register failed. Please try again.");
+            console.error("Registration error:", error);
+            if (error.code === 'auth/email-already-in-use') {
+              onSwitchToLogin();
+            }
         }
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={css.authForm}>
+        <form onSubmit={handleSubmit(submitForm)} className={css.authForm}>
             <div>
                 {errors.name && <p className={css.errors}>{errors.name.message}</p>}
                 <input
                     className={css.nameForm}
-                    type="name"
+                    type="text"
                     placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     {...register('name')}
                 />
             </div>
@@ -57,21 +43,16 @@ const RegistrationForm = ({ onClose }) => {
                     className={css.emailForm}
                     type="email"
                     placeholder="Email"
-                    autoComplete="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     {...register('email')}
                 />
             </div>
-            <div className={css.inputWrapper}>
+            <div>
                 {errors.password && <p className={css.errors}>{errors.password.message}</p>}
                 <input
                     className={css.passwordForm}
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     {...register('password')}
                 />
                 <svg
@@ -85,7 +66,6 @@ const RegistrationForm = ({ onClose }) => {
                 </svg>
             </div>
             <button className={css.buttonForm} type="submit">Register</button>
-            {error && <p className={css.errors}>{error}</p>}
         </form>
     );
 };

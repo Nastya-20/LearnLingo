@@ -217,6 +217,12 @@
     fill: #fff;
     stroke: #121417;
 }
+
+.heartActive{
+    fill: #f4c550;
+    stroke: #f4c550;
+}
+
 .detailsTitle {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -321,6 +327,11 @@
     line-height: 114%;
     color: #121417;
 }
+
+.levelLang:hover{
+    background-color:#f4c550;  
+}
+
 /* Кнопка Read more */
 .reviewText {
     width: 968px;
