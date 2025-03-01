@@ -4,6 +4,7 @@ import { collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, getDoc } 
 import { onAuthStateChanged } from "firebase/auth";
 import BookForm from "../../components/BookForm/BookForm";
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
+import Loader from "../../components/Loader/Loader";
 import css from "./Favorites.module.css";
 
 export default function Favorites() {
@@ -164,16 +165,16 @@ export default function Favorites() {
                 </li>
             </ul>
 
-            {loading && <p>Loading favorite teachers...</p>}
+            {loading && <Loader />}
             {error && <p className={css.error}>{error}</p>}
 
-            {!loading && !error && favoriteTeachers.length === 0 && <p>No favorite teachers yet.</p>}
+            {!loading && !error && favoriteTeachers.length === 0 && <Loader><p>No favorite teachers yet.</p></Loader>}
 
             {!loading && !error && favoriteTeachers.slice(0, visibleCount).map((teacher) => (
                 <div key={teacher.id} className={css.detailsTeachers}>
                     <div className={css.imgContainer}>
                         <img className={css.imgTeachers} width="96" height="96" src={teacher.avatar_url} alt={teacher.name} />
-                    </div>
+                </div>
                     <div>
                         <div className={css.detailsItems}>
                             <h3 className={css.detailsTitle}>Languages</h3>

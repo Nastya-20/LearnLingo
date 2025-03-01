@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Loader from "../../components/Loader/Loader";
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
 import BookForm from "../../components/BookForm/BookForm";
 import { db, auth } from "../../firebase";
@@ -138,16 +139,6 @@ export default function Teachers() {
         fetchTeachers();
     }, []);
 
-    // Додаю log після успішного отримання викладачів
-    useEffect(() => {
-        if (teachers.length > 0) {
-            console.log("Teachers successfully fetched and set:", teachers);
-        }
-    }, [teachers]);
-    useEffect(() => {
-        console.log("Updated favorites state after toggle:", favorites);
-    }, [favorites]);
-
     // Функція для зміни рівня мови
     const handleLevelClick = (teacherId, level) => {
         if (!teacherId) return;
@@ -212,7 +203,7 @@ export default function Teachers() {
                 </li>
             </ul>
 
-            {loading && <p>Loading teachers...</p>}
+            {loading && <Loader />}
             {error && <p className={css.error}>{error}</p>}
 
             {!loading && !error && (

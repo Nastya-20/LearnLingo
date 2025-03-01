@@ -29,6 +29,7 @@ form {
 }
 
 .passwordForm {
+    position: relative;
     border: 1px solid rgba(18, 20, 23, 0.1);
     border-radius: 12px;
     padding: 16px 18px;
@@ -39,8 +40,8 @@ form {
 
 .iconEye {
     position: absolute;
-    right: 18px;
-    top: 27%;
+    right: 80px;
+    top: 68%;
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
