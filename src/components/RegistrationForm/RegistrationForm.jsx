@@ -2,26 +2,32 @@ import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from '../AuthModal/authSchema';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import css from './RegistrationForm.module.css';
 
 const RegistrationForm = ({ onSubmit, onClose, onSwitchToLogin }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const {reset, register, handleSubmit, formState: { errors } } = useForm({
+    const { reset, register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(registerSchema),
     });
-    console.log("Form Errors:", errors); 
+    console.log("Form Errors:", errors);
 
     const submitForm = async (data) => {
-        console.log("Form data:", data); 
+        console.log("Form data:", data);
         try {
-            await onSubmit(data);  
+            await onSubmit(data);
             onClose();
             reset(),
             onSwitchToLogin(data);
+
+            toast.success("Registration successful! You can now log in.");
         } catch (error) {
             console.error("Registration error:", error);
+
+            toast.error("Registration failed. Please try again.");
             if (error.code === 'auth/email-already-in-use') {
-              onSwitchToLogin();
+                onSwitchToLogin();
             }
         }
     };

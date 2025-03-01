@@ -1,8 +1,60 @@
-# React + Vite
+Online Language Tutors
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Опис проєкту
 
-Currently, two official plugins are available:
+Online Language Tutors – це веб-застосунок для компанії, яка пропонує послуги викладачів з вивчення мов онлайн. Користувачі можуть переглядати список викладачів, фільтрувати їх за мовою викладання, рівнем знань учнів та ціною за годину заняття, а також додавати викладачів у "Обране".
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Функціональність
+
+Головна сторінка "Home" з описом переваг компанії та посиланням на сторінку викладачів.
+Сторінка "Teachers" зі списком викладачів та можливістю фільтрації.
+Приватна сторінка "Favorites" з викладачами, яких користувач додав у "Обране".
+Авторизація та реєстрація користувачів через Firebase Authentication.
+Збереження списку обраних викладачів у Firebase або LocalStorage.
+Завантаження додаткових викладачів по кліку на кнопку "Load more".
+Додавання/видалення викладача в "Обране".
+Розширений перегляд інформації про викладача.
+Форма для бронювання пробного заняття.
+Захищені маршрути для авторизованих користувачів.
+
+Використані технології:
+
+React – для створення інтерфейсу.
+
+React Router – для маршрутизації між сторінками.
+
+Firebase Authentication – для реєстрації та авторизації користувачів.
+
+Firebase Realtime Database – для зберігання списку викладачів.
+
+react-hook-form & yup – для створення та валідації форм.
+
+CSS (або SCSS) – для стилізації сторінок.
+
+Vite – для швидкої збірки проєкту.
+
+Макет:![Приклад макету](public/image.png)
+
+Посилання на макет:![макет] https://www.figma.com/file/dewf5jVviSTuWMMyU3d8Mc/%D0%9F%D0%B5%D1%82-%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82-%D0%B4%D0%BB%D1%8F-%D0%9A%D0%A6?type=design&node-id=0-1&mode=design&t=jCmjSs9PeOjObYSc-0 
+
+Встановлення та запуск:
+
+# Клонувати репозиторій
+git clone https://[](https://github.com/Nastya-20/LearnLingo)
+
+# Перейти в папку проєкту
+cd online-language-tutors
+
+# Встановити залежності
+npm install
+
+# Запустити проєкт
+npm run dev
+
+Деплой
+
+Проєкт розміщений на vercel.app https://[](https://learn-lingo-lemon-pi.vercel.app)
+
+Ліцензія
+
+Проєкт розповсюджується під ліцензією MIT.

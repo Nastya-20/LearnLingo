@@ -1,34 +1,40 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 import { loginSchema } from '../AuthModal/authSchema';
-
 import css from './LoginForm.module.css';
 
 const LoginForm = ({ onSubmit, onClose, onSwitchToLogin }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
-    
-    const {reset, register, handleSubmit, formState: { errors } } = useForm({
+
+    const { reset, register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema),
     });
     console.log("Form Errors:", errors);
 
     const login = async (data) => {
-        console.log("Form data:", data); 
+        console.log("Form data:", data);
         try {
             await onSubmit(data);
+            toast.success("Successfully logged in!");
             onClose();
             reset();
+
         } catch (error) {
             console.log("Login error:", error.code);
-            if (error.code === 'auth/user-not-found'){
-                setError("This user doesn't exist. Please register first.");
+
+            if (error.code === 'auth/user-not-found') {
+                // Виводимо тост при невдалій спробі знайти користувача
+                toast.error("This user doesn't exist. Please register first.");
                 onSwitchToLogin();
             } else if (error.code === 'auth/wrong-password') {
-                setError("Incorrect password. Please try again.");
+                // Виводимо тост при неправильному паролі
+                toast.error("Incorrect password. Please try again.");
             } else {
-                setError("Login failed. Please try again.");
+                // Загальний тост про помилку
+                toast.error("Login failed. Please try again.");
             }
         }
     };
@@ -64,13 +70,9 @@ const LoginForm = ({ onSubmit, onClose, onSwitchToLogin }) => {
                     <use href={`/icons.svg#icon-eye${showPassword ? "" : "-off"}`} />
                 </svg>
             </div>
-            <button className={css.buttonForm} type="submit">Log in</button>               
-            {error && <p className={css.errors}>{error}</p>}
+            <button className={css.buttonForm} type="submit">Log in</button>
         </form>
     );
 };
 
 export default LoginForm;
-
-
-

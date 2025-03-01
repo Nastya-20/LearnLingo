@@ -1,6 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import css from './BookForm.module.css';
 
@@ -22,9 +24,10 @@ export default function BookForm({ toggleModal, isOpen }) {
 
     const onSubmit = (data) => {
         console.log('Form Submitted:', data);
+        toast.success('Form successfully submitted!');
         toggleModal();
     };
-
+  
     return (
         <>
             {isOpen && (
@@ -68,7 +71,7 @@ export default function BookForm({ toggleModal, isOpen }) {
                                     <input type="radio" className={css.radio} value="Culture, travel or hobby" {...register('reason')} /> Culture, travel or hobby
                                 </label>
                             </fieldset>
- 
+
                             <p className={css.error}>{errors.name?.message}</p>
                             <input
                                 className={css.input}
@@ -91,7 +94,7 @@ export default function BookForm({ toggleModal, isOpen }) {
                                 placeholder="Phone number"
                                 {...register('phone')}
                             />
- 
+
                             <button className={css.buttonBook} type="submit">
                                 Book
                             </button>

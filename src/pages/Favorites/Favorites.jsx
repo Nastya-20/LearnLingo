@@ -280,7 +280,9 @@ export default function Favorites() {
                     </div>
                 </div>
             ))}
-            {visibleCount < teachers.length && <LoadMoreButton onLoadMore={() => setVisibleCount(prev => prev + 4)} />}
+            {favoriteTeachers.length > visibleCount && (
+                <LoadMoreButton onLoadMore={() => setVisibleCount(prev => prev + 4)} />
+            )}
         </div>
     );
 }

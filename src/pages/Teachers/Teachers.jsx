@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Loader from "../../components/Loader/Loader";
 import LoadMoreButton from "../../components/LoadMoreButton/LoadMoreButton";
 import BookForm from "../../components/BookForm/BookForm";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { db, auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { setDoc, collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "firebase/firestore";
@@ -56,7 +58,7 @@ export default function Teachers() {
     // Додаю/видаляю з обраних
     const toggleFavorite = async (teacherId) => {
         if (!user) {
-            alert("This feature is available for authorized users only.");
+            toast.error("This feature is available for authorized users only.");
             return;
         }
         if (user) {
@@ -70,6 +72,7 @@ export default function Teachers() {
                     // Створюю документ з полем "favorites", яке містить поточного викладача
                     await setDoc(userRef, { favorites: [teacherId] });
                     setFavorites([teacherId]);  // Оновлюю стейт локально
+                    toast.success("Teacher added to favorites!");
                 } catch (error) {
                     console.error("Error creating user document:", error);
                 }
@@ -85,8 +88,10 @@ export default function Teachers() {
                 setFavorites((prev) =>
                     isFavorite ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
                 );
+                toast.success(isFavorite ? "Teacher removed from favorites!" : "Teacher added to favorites!");
             } catch (error) {
                 console.error("Error updating favorites:", error);
+                toast.error("Error updating favorites.");
             }
         } else {
             // Для неавторизованих користувачів
@@ -97,10 +102,11 @@ export default function Teachers() {
             setFavorites(updatedFavorites);
             localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
             console.log("Updated favorites saved to localStorage:", updatedFavorites);
+            toast.success("Teacher added to favorites!");
         }
     };
 
-// выдкриваю модалку
+    // выдкриваю модалку
     const toggleModal = () => setIsModalOpen((prev) => !prev);
 
     const handleLanguageChange = (event) => {
@@ -113,11 +119,11 @@ export default function Teachers() {
         setSelectedPrice(event.target.value);
     };
 
-// функція для завантаження білше вчителів
+    // функція для завантаження білше вчителів
     const handleReadMore = (teacherId) => {
         setExpandedTeacherId(prevId => (prevId === teacherId ? null : teacherId));
     };
-// завантажую вчителів
+    // завантажую вчителів
     const fetchTeachers = async () => {
         setLoading(true);
         try {
@@ -315,9 +321,12 @@ export default function Teachers() {
                             </div>
                         </div>
                     ))}
-                    {visibleCount < teachers.length && <LoadMoreButton onLoadMore={() => setVisibleCount(prev => prev + 4)} />}
+                    {teachers.length > visibleCount && (
+                        <LoadMoreButton onLoadMore={() => setVisibleCount(prev => prev + 4)} />
+                    )}
                 </div>
             )}
+            <ToastContainer />
         </div>
     );
 };
