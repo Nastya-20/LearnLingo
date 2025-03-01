@@ -10,8 +10,8 @@ import css from "./Teachers.module.css";
 export default function Teachers() {
     const [selectedLanguage, setSelectedLanguage] = useState("French");
     const [expandedTeacherId, setExpandedTeacherId] = useState(null);
-    const [selectedLevel, setSelectedLevel] = useState("A1"); 
-    const [selectedPrice, setSelectedPrice] = useState("10"); 
+    const [selectedLevel, setSelectedLevel] = useState("A1");
+    const [selectedPrice, setSelectedPrice] = useState("10");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(4);
     const [teachers, setTeachers] = useState([]);
@@ -19,6 +19,10 @@ export default function Teachers() {
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const [favorites, setFavorites] = useState([]);
+    const [selectedLevels, setSelectedLevels] = useState(() => {
+        const savedLevels = localStorage.getItem("selectedLevels");
+        return savedLevels ? JSON.parse(savedLevels) : {};
+    });
 
     useEffect(() => {
         // Перевіряю статус авторизації користувача
@@ -35,7 +39,7 @@ export default function Teachers() {
         return () => unsubscribe();
     }, []);
 
-        // Завантажую обраних викладачів
+    // Завантажую обраних викладачів
     const loadFavorites = async (userId) => {
         try {
             const userRef = doc(db, "users", userId);
@@ -54,87 +58,86 @@ export default function Teachers() {
             alert("This feature is available for authorized users only.");
             return;
         }
-       if(user){
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
 
-        // Якщо документ користувача не існує, створюю новий
-        if (!userSnap.exists()) {
-            console.log("User document does not exist. Creating a new document...");
+            // Якщо документ користувача не існує, створюю новий
+            if (!userSnap.exists()) {
+                console.log("User document does not exist. Creating a new document...");
+                try {
+                    // Створюю документ з полем "favorites", яке містить поточного викладача
+                    await setDoc(userRef, { favorites: [teacherId] });
+                    setFavorites([teacherId]);  // Оновлюю стейт локально
+                } catch (error) {
+                    console.error("Error creating user document:", error);
+                }
+                return;
+            }
+
+            // Якщо користувач вже має документ, додаю або видаляю викладача з його обраних
+            const isFavorite = favorites.includes(teacherId);
             try {
-                // Створюю документ з полем "favorites", яке містить поточного викладача
-                await setDoc(userRef, { favorites: [teacherId] });
-                setFavorites([teacherId]);  // Оновлюю стейт локально
+                await updateDoc(userRef, {
+                    favorites: isFavorite ? arrayRemove(teacherId) : arrayUnion(teacherId),
+                });
+                setFavorites((prev) =>
+                    isFavorite ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
+                );
             } catch (error) {
-                console.error("Error creating user document:", error);
+                console.error("Error updating favorites:", error);
             }
-            return;
+        } else {
+            // Для неавторизованих користувачів
+            const updatedFavorites = favorites.includes(teacherId)
+                ? favorites.filter((id) => id !== teacherId)
+                : [...favorites, teacherId];
+
+            setFavorites(updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+            console.log("Updated favorites saved to localStorage:", updatedFavorites);
         }
+    };
 
-        // Якщо користувач вже має документ, додаю або видаляю викладача з його обраних
-        const isFavorite = favorites.includes(teacherId);
-           try {
-               await updateDoc(userRef, {
-                   favorites: isFavorite ? arrayRemove(teacherId) : arrayUnion(teacherId),
-               });
-               setFavorites((prev) =>
-                   isFavorite ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
-               );
-           } catch (error) {
-               console.error("Error updating favorites:", error);
-           }
-            } else {
-           // Для неавторизованих користувачів
-                const updatedFavorites = favorites.includes(teacherId)
-                    ? favorites.filter((id) => id !== teacherId)
-                    : [...favorites, teacherId];
-
-                setFavorites(updatedFavorites);
-           localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-           console.log("Updated favorites saved to localStorage:", updatedFavorites);
-            }
-        };
-
-
+// выдкриваю модалку
     const toggleModal = () => setIsModalOpen((prev) => !prev);
 
     const handleLanguageChange = (event) => {
         setSelectedLanguage(event.target.value);
     };
-
     const handleLevelChange = (event) => {
         setSelectedLevel(event.target.value);
     };
-
     const handlePriceChange = (event) => {
         setSelectedPrice(event.target.value);
     };
 
-
+// функція для завантаження білше вчителів
     const handleReadMore = (teacherId) => {
         setExpandedTeacherId(prevId => (prevId === teacherId ? null : teacherId));
-        };
-        
-      const fetchTeachers = async () => {
-                setLoading(true);
-                try {
-                    const querySnapshot = await getDocs(collection(db, "teachers"));
-                    const teachersList = querySnapshot.docs.map((doc) => ({
-                        id: doc.id,
-                        ...doc.data(),
-                    }));
-                    setTeachers(teachersList);
-                } catch (error) {
-                    console.error("Error fetching teachers:", error);
-                    setError("Failed to load teachers.");
-                } finally {
-                    setLoading(false);
-                }
-            };
+    };
+// завантажую вчителів
+    const fetchTeachers = async () => {
+        setLoading(true);
+        try {
+            const querySnapshot = await getDocs(collection(db, "teachers"));
+            const teachersList = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setTeachers(teachersList);
+        } catch (error) {
+            console.error("Error fetching teachers:", error);
+            setError("Failed to load teachers.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        useEffect(() => {
-            fetchTeachers();
-        }, []);
+    useEffect(() => {
+        fetchTeachers();
+    }, []);
+
     // Додаю log після успішного отримання викладачів
     useEffect(() => {
         if (teachers.length > 0) {
@@ -145,6 +148,24 @@ export default function Teachers() {
         console.log("Updated favorites state after toggle:", favorites);
     }, [favorites]);
 
+    // Функція для зміни рівня мови
+    const handleLevelClick = (teacherId, level) => {
+        if (!teacherId) return;
+
+        setSelectedLevels(prev => {
+            const updatedLevels = { ...prev, [teacherId]: level };
+            localStorage.setItem("selectedLevels", JSON.stringify(updatedLevels)); // Зберігаємо у localStorage
+            return updatedLevels;
+        });
+    };
+
+    // При завантаженні сторінки зчитую дані з localStorage
+    useEffect(() => {
+        const savedLevels = localStorage.getItem("selectedLevels");
+        if (savedLevels) {
+            setSelectedLevels(JSON.parse(savedLevels));
+        }
+    }, []);
 
 
     return (
@@ -278,11 +299,16 @@ export default function Teachers() {
                                 {/* Додатковий контент: відгуки + кнопка Book trial lesson */}
 
                                 <div className={css.levelLanguages}>
-                                    {teacher.levels.map((level, index) => (
-                                        <button key={index} className={css.levelLang}>
-                                            {level}
-                                        </button>
-                                    ))}
+                                    {Array.isArray(teacher.levels) &&
+                                        teacher.levels.map((level, index) => (
+                                            <button
+                                                key={index}
+                                                className={`${css.levelLang} ${selectedLevels[teacher.id] === level ? css.selected : ""}`}
+                                                onClick={() => handleLevelClick(teacher.id, level)}
+                                            >
+                                                {level}
+                                            </button>
+                                        ))}
                                 </div>
 
                                 {/* Кнопка Book trial lesson */}

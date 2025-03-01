@@ -344,6 +344,10 @@
     color: #121417;
 }
 
+.selected {
+    background-color: #f4c550;
+}
+
 /* Кнопка Read more */
 .reviewText {
     width: 968px;

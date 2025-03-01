@@ -13,6 +13,7 @@
 }
 
 /* вибір мови */
+
 .languagesTeachers {
     width: 221px;
     display: flex;
@@ -328,11 +329,12 @@
     color: #121417;
 }
 
-.levelLang:hover{
+.selected{
     background-color:#f4c550;  
 }
 
 /* Кнопка Read more */
+
 .reviewText {
     width: 968px;
      font-family: 'Roboto', sans-serif;

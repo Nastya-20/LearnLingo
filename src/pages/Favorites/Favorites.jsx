@@ -15,6 +15,10 @@ export default function Favorites() {
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const [favorites, setFavorites] = useState([]);
+    const [selectedLevels, setSelectedLevels] = useState(() => {
+        const savedLevels = localStorage.getItem("selectedLevels");
+        return savedLevels ? JSON.parse(savedLevels) : {};
+    });
 
     // Відстежую авторизації користувача
     useEffect(() => {
@@ -96,8 +100,27 @@ export default function Favorites() {
     // Фільтруєю лише викладачів, які є в `favorites`
     const favoriteTeachers = teachers.filter((teacher) => favorites.includes(teacher.id));
 
-        
-     return (
+    // Функція для зміни рівня мови
+    const handleLevelClick = (teacherId, level) => {
+        if (!teacherId) return;
+
+        setSelectedLevels(prev => {
+            const updatedLevels = { ...prev, [teacherId]: level };
+            localStorage.setItem("selectedLevels", JSON.stringify(updatedLevels)); // Зберігаємо у localStorage
+            return updatedLevels;
+        });
+    };
+
+    // При завантаженні сторінки зчитую дані з localStorage
+    useEffect(() => {
+        const savedLevels = localStorage.getItem("selectedLevels");
+        if (savedLevels) {
+            setSelectedLevels(JSON.parse(savedLevels));
+        }
+    }, []);
+
+
+    return (
         <div className={css.wrapperTeachers}>
             <ul className={css.selectorTeachers}>
                 <li>
@@ -144,9 +167,9 @@ export default function Favorites() {
             {loading && <p>Loading favorite teachers...</p>}
             {error && <p className={css.error}>{error}</p>}
 
-             {!loading && !error && favoriteTeachers.length === 0 && <p>No favorite teachers yet.</p>}
+            {!loading && !error && favoriteTeachers.length === 0 && <p>No favorite teachers yet.</p>}
 
-             {!loading && !error && favoriteTeachers.slice(0, visibleCount).map((teacher) => (
+            {!loading && !error && favoriteTeachers.slice(0, visibleCount).map((teacher) => (
                 <div key={teacher.id} className={css.detailsTeachers}>
                     <div className={css.imgContainer}>
                         <img className={css.imgTeachers} width="96" height="96" src={teacher.avatar_url} alt={teacher.name} />
@@ -180,7 +203,7 @@ export default function Favorites() {
                             <svg
                                 onClick={() => {
                                     toggleFavorite(teacher.id);
-                                     console.log(`Favorite status of teacher ${teacher.id}:`, favorites.includes(teacher.id));
+                                    console.log(`Favorite status of teacher ${teacher.id}:`, favorites.includes(teacher.id));
                                 }}
                                 className={favorites.includes(teacher.id) ? css.iconHeartActive : css.iconHeart}
                                 aria-hidden="true"
@@ -231,11 +254,16 @@ export default function Favorites() {
                         {/* Додатковий контент: відгуки + кнопка Book trial lesson */}
 
                         <div className={css.levelLanguages}>
-                            {teacher.levels.map((level, index) => (
-                                <button key={index} className={css.levelLang}>
-                                    {level}
-                                </button>
-                            ))}
+                            {Array.isArray(teacher.levels) &&
+                                teacher.levels.map((level, index) => (
+                                    <button
+                                        key={index}
+                                        className={`${css.levelLang} ${selectedLevels[teacher.id] === level ? css.selected : ""}`}
+                                        onClick={() => handleLevelClick(teacher.id, level)}
+                                    >
+                                        {level}
+                                    </button>
+                                ))}
                         </div>
 
                         {/* Кнопка Book trial lesson */}
