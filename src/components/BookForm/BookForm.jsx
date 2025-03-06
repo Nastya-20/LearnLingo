@@ -4,6 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
+import { db, auth } from '../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from "firebase/auth";
 import css from './BookForm.module.css';
 
 const schema = yup.object().shape({
@@ -14,7 +17,15 @@ const schema = yup.object().shape({
 });
 
 export default function BookForm({ toggleModal, isOpen }) {
+    const [user, setUser] = React.useState(null);
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => unsubscribe();
+    }, []);
     const {
+        reset,
         register,
         handleSubmit,
         formState: { errors },
@@ -22,10 +33,21 @@ export default function BookForm({ toggleModal, isOpen }) {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log('Form Submitted:', data);
-        toast.success('Form successfully submitted!');
-        toggleModal();
+        if (!user) {
+            toast.error('You must be logged in to submit the form.');
+            return;
+        }
+        try {
+            await addDoc(collection(db, 'bookings'), { ...data, userId: user.uid });
+            reset();
+            toggleModal();
+            toast.success('Form successfully submitted!');
+        } catch (error) {
+            console.error("Form submission error!", error);
+            toast.error("Form submission error. Please try again.");
+        }
     };
   
     return (

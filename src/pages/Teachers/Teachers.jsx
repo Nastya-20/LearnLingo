@@ -11,10 +11,10 @@ import css from "./Teachers.module.css";
 
 
 export default function Teachers() {
-    const [selectedLanguage, setSelectedLanguage] = useState("French");
+    const [selectedLanguage, setSelectedLanguage] = useState("All");
     const [expandedTeacherId, setExpandedTeacherId] = useState(null);
-    const [selectedLevel, setSelectedLevel] = useState("A1");
-    const [selectedPrice, setSelectedPrice] = useState("10");
+    const [selectedLevel, setSelectedLevel] = useState("All");
+    const [selectedPrice, setSelectedPrice] = useState("All");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(4);
     const [teachers, setTeachers] = useState([]);
@@ -172,6 +172,7 @@ export default function Teachers() {
                     <label className={css.languagesTeachers}>
                         Languages:
                         <select className={css.selectItemLang} value={selectedLanguage} onChange={handleLanguageChange}>
+                            <option value="All">All</option>
                             <option value="French">French</option>
                             <option value="English">English</option>
                             <option value="German">German</option>
@@ -187,6 +188,7 @@ export default function Teachers() {
                     <label className={css.levelTeachers}>
                         Level of knowledge
                         <select className={css.selectItemLevel} value={selectedLevel} onChange={handleLevelChange}>
+                            <option value="All">All</option>
                             <option value="A1">A1 Beginner</option>
                             <option value="A2">A2 Elementary</option>
                             <option value="B1">B1 Intermediate</option>
@@ -198,6 +200,7 @@ export default function Teachers() {
                     <label className={css.priceTeachers}>
                         Price
                         <select className={css.selectItemPrice} value={selectedPrice} onChange={handlePriceChange}>
+                            <option value="All">All</option>
                             <option value="10">25 $</option>
                             <option value="20">27 $</option>
                             <option value="30">28 $</option>
